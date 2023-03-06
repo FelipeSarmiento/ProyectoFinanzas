@@ -12,10 +12,8 @@ namespace Finanzas.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            
             string idUser = User.Claims.Where(c => c.Type == "idUser").Select(c => c.Value).FirstOrDefault();
             DashboardData oDashboardData = new DashboardData();
-            
             ViewBag.Months = oDashboardData.GetMonths();
             ViewBag.Categories = oDashboardData.GetCategories(Int32.Parse(idUser));
             ViewBag.PaymentMethods = oDashboardData.GetPaymentMethods(Int32.Parse(idUser));
@@ -34,8 +32,10 @@ namespace Finanzas.Controllers
             oCategories.idUser = Int32.Parse(idUser);
             
             oDashboardData.AddCategory(oCategories);
+            
+            ViewBag.Categories = oDashboardData.GetCategories(Int32.Parse(idUser));
 
-            return Index();
+            return View("index");
         }
         
         [HttpPost]
