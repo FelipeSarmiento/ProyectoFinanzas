@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+}
+<div class="w-full bg-gray-100 min-h-[100vh] flex py-10 justify-center">
+    <div class="w-10/12 xl:w-8/12 py-6 flex flex-col items-center">
+
+        <!-- TITULO PRINCIPAL -->
+        <div class="w-11/12 text-center h-32 flex flex-col justify-center gap-y-4">
+            <span class="font-bold text-4xl">Empieza a llevar el</span>
+            <span class="font-extrabold text-cyan-500 text-5xl">control de tus finanzas</span>
+        </div>
+
+        <!-- DESCRIPCION PRINCIPAL -->
+
+        <div class="mt-10 xl:mt-4 flex flex-col gap-y-5 font-medium text-justify">
+            <span>Actualmente, la mayoria de la población no aplica metodos de regulación financiera, lo cual afecta negativamente a cada persona, ya que no se realiza una proyección a corto y largo plazo de acuerdo a los ingresos y los egresos que efectuan al mes, incluso al año.</span>
+            <span>En <b>Piggy</b>, queremos ayudarte a llevar un control sobre todos tus gastos y que juntos podamos realizar una proyección financiera con el fin de que lleves un mayor control de tu dinero.</span>
+            <span>Empecemos conociendo algunas de las posibilidades que te ofrecemos para que <span class="text-cyan-500 font-extrabold">controles tus finanzas</span> de la mejor manera posible.</span>
+        </div>
+
+        <!-- TARJETA -->
+        <div class="w-11/12 grid grid-cols-1 xl:grid-cols-2 gap-1 xl:gap-4 mt-6">
+            <div class="cols-6 order-2 xl:order-1 h-[300px] flex items-center justify-center">
+                <div class="w-10/12 min-w-[450px] h-[250px] bg-gradient-to-r from-cyan-600 to-cyan-500 rounded-3xl flex items-center justify-center text-center relative">
+                    <div class="rounded-full h-10 w-10 border-white border-2 absolute top-2 left-2 flex items-center justify-center">
+                        <span class="font-bold text-white">1</span>
+                    </div>
+                    <div class="w-9/12 h-16 border-b-2 border-white flex items-center justify-center relative">
+                        <span class="text-white text-2xl font-extrabold">$1.000.00</span>
+                        <img class="absolute top-2/4 -translate-y-2/4 right-4 h-[20px] w-[20px]" src="icons/mas.png" alt="">
+                        <span class="text-white text-xl font-extrabold absolute top-16 left-2/4 -translate-x-2/4">Ingresos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cols-6 order-1 xl:order-2 h-[150px] xl:h-[300px] flex items-center justify-center text-center">
+                <span class="text-4xl text-black font-bold">Registra<br/>tus ingresos</span>
+            </div>
+        </div>
+
+        <!-- TARJETA -->
+        <div class="w-11/12 grid grid-cols-1 xl:grid-cols-2 gap-4 mt-6 flex-row-reverse">
+            <div class="cols-6 h-[150px] xl:h-[300px] flex items-center justify-center text-center">
+                <span class="text-4xl text-black font-bold">Establece<br/>tus metas</span>
+            </div>
+            <div class="cols-6 h-[300px] flex items-center justify-center">
+                <div class="w-10/12 min-w-[450px] h-[250px] py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-3xl flex flex-col justify-center items-center text-center relative">
+                    <div class="rounded-full h-10 w-10 border-white border-2 absolute top-2 right-2 flex items-center justify-center">
+                        <span class="font-bold text-white">2</span>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-16 border-b-2 border-white flex items-center justify-center relative">
+                            <span class="text-white text-2xl font-extrabold">Enero</span>
+                        </div>
+                        <div class="h-16 border-b-2 border-white flex items-center justify-center relative">
+                            <img class="absolute top-2/4 -translate-y-2/4 left-4 h-[20px] w-[20px]" src="icons/minus-sign.png" alt="">
+                            <span class="text-white text-2xl font-extrabold">$700</span>
+                            <img class="absolute top-2/4 -translate-y-2/4 right-4 h-[20px] w-[20px]" src="icons/mas.png" alt="">
+                        </div>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-16 border-b-2 border-white flex items-center justify-center relative">
+                            <span class="text-white text-2xl font-extrabold">Febrero</span>
+                        </div>
+                        <div class="h-16 border-b-2 border-white flex items-center justify-center relative">
+                            <img class="absolute top-2/4 -translate-y-2/4 left-4 h-[20px] w-[20px]" src="icons/minus-sign.png" alt="">
+                            <span class="text-white text-2xl font-extrabold">$800</span>
+                            <img class="absolute top-2/4 -translate-y-2/4 right-4 h-[20px] w-[20px]" src="icons/mas.png" alt="">
+                        </div>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-16 border-b-2 border-white flex items-center justify-center relative">
+                            <span class="text-white text-2xl font-extrabold">Marzo</span>
+                        </div>
+                        <div class="h-16 border-b-2 border-white flex items-center justify-center relative">
+                            <img class="absolute top-2/4 -translate-y-2/4 left-4 h-[20px] w-[20px]" src="icons/minus-sign.png" alt="">
+                            <span class="text-white text-2xl font-extrabold">$750</span>
+                            <img class="absolute top-2/4 -translate-y-2/4 right-4 h-[20px] w-[20px]" src="icons/mas.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TARJETA -->
+        <div class="w-11/12 grid grid-cols-1 xl:grid-cols-2 gap-4 mt-6">
+            <div class="cols-6 order-2 xl:order-1 h-[300px] flex items-center justify-center">
+                <div class="w-10/12 min-w-[450px] h-[250px] py-4 bg-gradient-to-r from-cyan-600 to-cyan-500 rounded-3xl flex flex-col justify-center items-center text-center relative">
+                    <div class="rounded-full h-10 w-10 border-white border-2 absolute top-2 left-2 flex items-center justify-center">
+                        <span class="font-bold text-white">3</span>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-12 border-b-2 border-white flex items-center justify-start relative">
+                            <span class="text-white text-xl font-extrabold">Mercado</span>
+                        </div>
+                        <div class="h-12 border-b-2 border-white flex items-center justify-end relative">
+                            <span class="text-white text-xl font-extrabold">- $300</span>
+                        </div>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-12 border-b-2 border-white flex items-center justify-start relative">
+                            <span class="text-white text-xl font-extrabold">Cuota Carro</span>
+                        </div>
+                        <div class="h-12 border-b-2 border-white flex items-center justify-end relative">
+                            <span class="text-white text-xl font-extrabold">- $800</span>
+                        </div>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-12 border-b-2 border-white flex items-center justify-start relative">
+                            <span class="text-white text-xl font-extrabold">Apartamento</span>
+                        </div>
+                        <div class="h-12 border-b-2 border-white flex items-center justify-end relative">
+                            <span class="text-white text-xl font-extrabold">- $750</span>
+                        </div>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-12 border-b-2 border-white flex items-center justify-start relative">
+                            <span class="text-white text-xl font-extrabold">Celular</span>
+                        </div>
+                        <div class="h-12 border-b-2 border-white flex items-center justify-end relative">
+                            <span class="text-white text-xl font-extrabold">- $100</span>
+                        </div>
+                    </div>
+                    <div class="w-9/12 grid grid-cols-2 relative">
+                        <div class="h-12 flex items-center justify-start relative">
+                            <span class="text-white text-xl font-extrabold">TOTAL</span>
+                        </div>
+                        <div class="h-12 flex items-center justify-end relative">
+                            <span class="text-white text-xl font-extrabold">- $1950</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cols-6 order-1 xl:order-2 h-[150px] xl:h-[300px] flex items-center justify-center text-center">
+                <span class="text-4xl text-black font-bold">Controla<br/>tus gastos</span>
+            </div>
+        </div>
+
+        <!-- TARJETA -->
+        <div class="w-11/12 grid grid-cols-1 xl:grid-cols-2 gap-4 mt-6">
+            <div class="cols-6 h-[150px] xl:h-[300px] flex items-center justify-center text-center">
+                <span class="text-4xl text-black font-bold">Crea tus<br/>propias categorias</span>
+            </div>
+            <div class="cols-6 h-[300px] flex items-center justify-center">
+                <div class="w-10/12 min-w-[450px] h-[250px] py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-3xl flex flex-col justify-center items-center text-center relative">
+                    <div class="rounded-full h-10 w-10 border-white border-2 absolute top-2 right-2 flex items-center justify-center">
+                        <span class="font-bold text-white">4</span>
+                    </div>
+                    <div class="w-9/12 h-[200px] grid grid-cols-4 justify-center items-center text-4xl text-white">
+                        <i class="fa-solid fa-shop"></i>
+                        <i class="fa-solid fa-laptop"></i>
+                        <i class="fa-solid fa-building-columns"></i>
+                        <i class="fa-solid fa-droplet"></i>
+                        <i class="fa-solid fa-utensils"></i>
+                        <i class="fa-solid fa-phone"></i>
+                        <i class="fa-solid fa-car"></i>
+                        <i class="fa-solid fa-gas-pump"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENSAJE REGISTRO -->
+        
+        @{
+            if (!User.Identity.IsAuthenticated)
+            {
+                <div class="mt-20 h-[100px] flex flex-col justify-center gap-y-5 font-extrabold text-2xl xl:text-4xl text-center leading-relaxed">
+                    <span>Registrate en Piggy y empieza a <br/>manejar tu dinero de forma responsable</span>
+                </div>
+            }
+            else
+            {
+                <div class="mt-20 h-[100px] flex flex-col justify-center gap-y-5 font-extrabold text-2xl xl:text-4xl text-center leading-relaxed">
+                    <span>Empieza a <br/>manejar tu dinero de forma responsable</span>
+                </div>
+            }
+        }
+        
+    </div>
+</div>

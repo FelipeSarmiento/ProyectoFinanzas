@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\icons\\finanzas.png",
+      "PackagePath": "staticwebassets\\icons\\finanzas.png"
+    },
+    {
+      "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\icons\\mas.png",
+      "PackagePath": "staticwebassets\\icons\\mas.png"
+    },
+    {
+      "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\icons\\minus-sign.png",
+      "PackagePath": "staticwebassets\\icons\\minus-sign.png"
+    },
+    {
+      "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\js\\tailwindcss.js",
+      "PackagePath": "staticwebassets\\js\\tailwindcss.js"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.Finanzas.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.Finanzas.props",
+      "PackagePath": "build\\Finanzas.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.Finanzas.props",
+      "PackagePath": "buildMultiTargeting\\Finanzas.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.Finanzas.props",
+      "PackagePath": "buildTransitive\\Finanzas.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
