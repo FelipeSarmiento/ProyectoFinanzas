@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using System.Globalization;
+using System.Text;
 using Finanzas.Models;
 
 namespace Finanzas.Data;
@@ -13,7 +14,7 @@ public class DashboardData
         string queryString = "SELECT * FROM Months";
 
         List<Month> Months = new List<Month>();
-        
+
         int idCurrentMonth = 0;
         string nameCurrentMonth = "";
 
@@ -29,18 +30,19 @@ public class DashboardData
                 {
                     while (dr.Read())
                     {
-                        if (dr["Name"].ToString() == (DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("en-US"))))
+                        if (dr["Name"].ToString() ==
+                            (DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("en-US"))))
                         {
                             idCurrentMonth = Int32.Parse(dr["idMonth"].ToString());
                             nameCurrentMonth = dr["Name"].ToString();
                         }
-                        
+
                         var Month = new Month();
                         Month.idMonth = Int32.Parse(dr["idMonth"].ToString());
                         Month.Name = dr["Name"].ToString();
                         Month.StartDate = dr["StartDate"].ToString();
                         Month.EndDate = dr["EndDate"].ToString();
-                        
+
                         Months.Add(Month);
                     }
 
@@ -51,6 +53,107 @@ public class DashboardData
         catch (Exception ex)
         {
             return new List<Month>();
+        }
+    }
+
+    public List<Icons> GetIcons()
+    {
+        string queryString = "SELECT * FROM Icons";
+
+        List<Icons> Icons = new List<Icons>();
+
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+
+                using (var dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var Icon = new Icons();
+                        Icon.idIcons = Int32.Parse(dr["idIcons"].ToString());
+                        Icon.Code = dr["Code"].ToString();
+                        Icon.CodeHTML = dr["CodeHTML"].ToString();
+
+                        Icons.Add(Icon);
+                    }
+
+                    return Icons;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return new List<Icons>();
+        }
+    }
+
+    public Balance GetBalance(int idUser, int idMonth)
+    {
+        Balance oBalance = new Balance();
+        
+        string queryString = "SELECT * FROM Balance WHERE idUser = " + idUser + " AND idMonth = " + idMonth;
+        
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+
+
+                using (var dr = command.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        oBalance.idBalance = Int32.Parse(dr["idBalance"].ToString());
+                        oBalance.Income = dr["Income"].ToString();
+                        oBalance.Expenses = dr["Expenses"].ToString();
+                        oBalance.Remaining = dr["Remaining"].ToString();
+                        oBalance.idUser = Int32.Parse(dr["idUser"].ToString() ?? "");
+                        oBalance.idMonth = Int32.Parse(dr["idMonth"].ToString() ?? "");
+
+                        return oBalance;
+
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var bills = GetBills(idUser, idMonth);
+                            
+                            double expenses = bills.Sum(b => b.Cost);
+                            double remaining = 0 - expenses;
+                            
+                            queryString = "INSERT INTO Balance (Income, Expenses, Remaining, idUser, idMonth) VALUES (0, "+ expenses + ", "+ remaining +" , " + idUser + ", " + idMonth + ")";
+                            cn = new Connection();
+                            using (var connection2 = new SqlConnection(cn.getCadenaSQL()))
+                            {
+                                connection2.Open();
+                                var command2 = new SqlCommand(queryString, connection2);
+                                command2.ExecuteNonQuery();
+
+                                return GetBalance(idUser, idMonth);
+                            }
+                            
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            return oBalance;
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return oBalance;
         }
     }
 
@@ -68,7 +171,7 @@ public class DashboardData
         }
 
         string queryString = "SELECT * FROM Months";
-        
+
         int idCurrentMonth = 0;
         string nameCurrentMonth = "";
 
@@ -103,7 +206,6 @@ public class DashboardData
 
     public List<Categories> GetCategories(int idUser)
     {
-
         string queryString = "SELECT * FROM Categories WHERE idUser = " + idUser;
 
         List<Categories> categories = new List<Categories>();
@@ -125,7 +227,7 @@ public class DashboardData
                         category.Name = dr["Name"].ToString();
                         category.idIcon = Int32.Parse(dr["idIcon"].ToString());
                         category.idUser = Int32.Parse(dr["idUser"].ToString());
-                        
+
                         categories.Add(category);
                     }
 
@@ -157,7 +259,7 @@ public class DashboardData
                 command.Parameters.AddWithValue("@idUser", oCategories.idUser);
                 command.ExecuteNonQuery();
                 connection.Close();
-                
+
                 categories = GetCategories(oCategories.idUser);
 
                 return categories;
@@ -168,10 +270,9 @@ public class DashboardData
             return new List<Categories>();
         }
     }
-    
+
     public List<PaymentMethods> GetPaymentMethods(int idUser)
     {
-
         string queryString = "SELECT * FROM PaymentsMethods WHERE idUser = " + idUser;
 
         List<PaymentMethods> paymentMethods = new List<PaymentMethods>();
@@ -192,7 +293,7 @@ public class DashboardData
                         paymentMethod.idPaymentMethod = Int32.Parse(dr["idPaymentMethod"].ToString());
                         paymentMethod.Name = dr["Name"].ToString();
                         paymentMethod.idUser = Int32.Parse(dr["idUser"].ToString());
-                        
+
                         paymentMethods.Add(paymentMethod);
                     }
 
@@ -205,6 +306,7 @@ public class DashboardData
             return new List<PaymentMethods>();
         }
     }
+
     public void AddPaymentMethod(PaymentMethods oPaymentMethod)
     {
         string queryString = "INSERT INTO PaymentsMethods (Name, idUser) VALUES (@Name, @idUser)";
@@ -227,4 +329,145 @@ public class DashboardData
             //return new List<Categories>();
         }
     }
+
+    public List<Bills> GetBills(int idUser, int idMonth)
+    {
+        string queryString = "SELECT * FROM Bills WHERE idUser = " + idUser + " AND idMonth = " + idMonth;
+
+        List<Bills> Bills = new List<Bills>();
+
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+
+                using (var dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var bills = new Bills();
+                        bills.idBill = Int32.Parse(dr["idBill"].ToString() ?? "");
+                        bills.idIcons = Int32.Parse(dr["idIcons"].ToString() ?? "");
+                        bills.Name = dr["Name"].ToString() ?? "";
+                        bills.Cost = Double.Parse(dr["Cost"].ToString() ?? "");
+                        bills.idMonth = Int32.Parse(dr["idMonth"].ToString() ?? "");
+                        bills.idUser = Int32.Parse(dr["idUser"].ToString() ?? "");
+                        bills.idCategory = Int32.Parse(dr["idCategory"].ToString() ?? "");
+                        bills.idPaymentMethod = Int32.Parse(dr["idPaymentMethod"].ToString() ?? "");
+
+                        Bills.Add(bills);
+                    }
+
+                    return Bills;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return new List<Bills>();
+        }
+    }
+
+    public void AddBill(Bills Bills)
+    {
+        string queryString =
+            $"INSERT INTO Bills (idIcons, Name, Cost, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bills.idIcons}, '{Bills.Name}', {Bills.Cost}, {Bills.idMonth}, {Bills.idUser}, {Bills.idCategory}, {Bills.idPaymentMethod} )";
+
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            //return new List<Categories>();
+        }
+    }
+
+    public void SaveBills(List<Bills> Bills)
+    {
+        foreach (var Bill in Bills)
+        {
+            string queryString = "UPDATE Bills SET idIcons = " + Bill.idIcons + ", Name = '" + Bill.Name +
+                                 "', Cost = " + Bill.Cost + ", idMonth = " + Bill.idMonth + ", idUser = " +
+                                 Bill.idUser + ", idCategory = " + Bill.idCategory + ", idPaymentMethod = " +
+                                 Bill.idPaymentMethod + " WHERE idBill = " + Bill.idBill;
+
+            //string queryString = $"INSERT INTO Bills (idIcons, Name, Cost, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bill.idIcons}, '{Bill.Name}', {Bill.Cost}, {Bill.idMonth}, {Bill.idUser}, {Bill.idCategory}, {Bill.idPaymentMethod} )";
+
+            try
+            {
+                var cn = new Connection();
+                using (var connection = new SqlConnection(cn.getCadenaSQL()))
+                {
+                    connection.Open();
+                    var command = new SqlCommand(queryString, connection);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //return new List<Categories>();
+            }
+        }
+    }
+
+    public void SaveBalance(Balance Balance)
+    {
+        
+        var bills = GetBills(Balance.idUser, Balance.idMonth);
+
+        double expenses = bills.Sum(c => c.Cost);
+        double remaining = Double.Parse(Balance.Income) - expenses;
+        
+        string queryString = "UPDATE Balance SET Income = " + Balance.Income + ", Expenses = " + expenses + ", Remaining = " + remaining + " WHERE idUser = " + Balance.idUser;
+
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            //return new List<Categories>();
+        }
+    }
+    
+    public void DeleteBill(int idBill)
+    {
+        string queryString = "DELETE FROM Bills WHERE idBill = " + idBill;
+
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            //return new List<Categories>();
+        }
+    }
+    
 }

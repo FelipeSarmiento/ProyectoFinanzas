@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vhS8lcOs4z4vqLSoOA3iORs5iXCf/rEbWp0W8PmG474=",
+  "Hash": "leN+ArGi5SZmNoGjyaAXRVEN15XM/2fKMsbqhBHkljs=",
   "Source": "Finanzas",
   "BasePath": "_content/Finanzas",
   "Mode": "Default",
@@ -16,6 +16,23 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\css\\font-awesome.css",
+      "SourceId": "Finanzas",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\",
+      "BasePath": "_content/Finanzas",
+      "RelativePath": "css/font-awesome.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\font-awesome.css"
+    },
     {
       "Identity": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\favicon.ico",
       "SourceId": "Finanzas",

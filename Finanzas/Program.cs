@@ -1,6 +1,8 @@
+using Finanzas.Controllers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,8 @@ builder.Services.AddControllersWithViews();
         options.ExpireTimeSpan = TimeSpan.FromDays(365); 
         options.Cookie.MaxAge = options.ExpireTimeSpan;
     });
+
+builder.Services.AddMemoryCache();
 builder.Services.AddAuthorization();
 builder.Services.AddControllersWithViews();
 

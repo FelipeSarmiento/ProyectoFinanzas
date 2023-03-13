@@ -14935,7 +14935,8 @@
       "Microsoft.AspNetCore.Session >= 2.2.0",
       "Microsoft.Extensions.Caching.Abstractions >= 8.0.0-preview.1.23110.8",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.10",
-      "System.Data.SqlClient >= 4.8.5"
+      "System.Data.SqlClient >= 4.8.5",
+      "System.Text.Encoding >= 4.3.0"
     ],
     "net7.0": [
       "Microsoft.AspNetCore.Authentication >= 2.2.0",
@@ -14952,7 +14953,8 @@
       "Microsoft.AspNetCore.Session >= 2.2.0",
       "Microsoft.Extensions.Caching.Abstractions >= 8.0.0-preview.1.23110.8",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.10",
-      "System.Data.SqlClient >= 4.8.5"
+      "System.Data.SqlClient >= 4.8.5",
+      "System.Text.Encoding >= 4.3.0"
     ]
   },
   "packageFolders": {
@@ -15059,6 +15061,10 @@
           "System.Data.SqlClient": {
             "target": "Package",
             "version": "[4.8.5, )"
+          },
+          "System.Text.Encoding": {
+            "target": "Package",
+            "version": "[4.3.0, )"
           }
         },
         "imports": [
@@ -15144,6 +15150,10 @@
           "System.Data.SqlClient": {
             "target": "Package",
             "version": "[4.8.5, )"
+          },
+          "System.Text.Encoding": {
+            "target": "Package",
+            "version": "[4.3.0, )"
           }
         },
         "imports": [

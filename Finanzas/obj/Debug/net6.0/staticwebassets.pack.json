@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\css\\font-awesome.css",
+      "PackagePath": "staticwebassets\\css\\font-awesome.css"
+    },
+    {
       "Id": "C:\\Users\\felip\\OneDrive\\Escritorio\\ProyectoFinanzas\\Finanzas\\Finanzas\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },

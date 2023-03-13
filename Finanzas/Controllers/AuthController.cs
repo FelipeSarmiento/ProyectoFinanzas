@@ -5,18 +5,23 @@ using Finanzas.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Finanzas.Controllers
 {
+
+    
     public class AuthController : Controller
     {
+        private string message = "";
+        
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            ViewBag.Message = message;
             return View("LoginPage");
         }
 
@@ -31,6 +36,7 @@ namespace Finanzas.Controllers
                 claims.Add(new Claim("idUser", result.Item3.idUser.ToString()));
                 claims.Add(new Claim(ClaimTypes.Name, result.Item3.Name));
                 claims.Add(new Claim(ClaimTypes.Email, result.Item3.Email));
+                
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -69,8 +75,8 @@ namespace Finanzas.Controllers
             var result = oUserRegister.RegisterUser(oUser);
             if (result.Item1)
             {
-                ViewBag.Message = result.Item2;
-                return View("LoginPage");
+                message = "Usuario registrado correctamente";
+                return RedirectToAction("Index", "Auth");
             }
             else
             {
