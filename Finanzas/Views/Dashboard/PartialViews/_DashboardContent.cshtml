@@ -1,0 +1,190 @@
+﻿@model Tuple<List<Finanzas.Models.Bills>, List<Finanzas.Models.Icons>, List<Finanzas.Models.Categories>, List<Finanzas.Models.PaymentMethods>>;
+
+<div id="DashboardContent">
+    @{
+        if (Model.Item1.Count > 0)
+        {
+            <div class="flex w-full relative gap-2 justify-center mt-4">
+
+                <div class="relative mt-1 rounded-md shadow-sm border-b-2 w-[63px]  border-cyan-500 h-7">
+                    <div class="flex items-center justify-center h-full">
+                        <span class="sm:text-sm text-cyan-500">
+                            ICO
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
+                    <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
+                        <span class="sm:text-sm text-cyan-500">
+                            Nombre
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
+                    <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
+                        <span class="sm:text-sm text-cyan-500">
+                            Valor
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
+                    <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
+                        <span class="sm:text-sm text-cyan-500">
+                            Categorias
+                        </span>
+                    </div>
+                </div>
+                <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
+                    <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
+                        <span class="sm:text-sm text-cyan-500">
+                            Medios de Pago
+                        </span>
+                    </div>
+                </div>
+                <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
+                    <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
+                        <span class="sm:text-sm text-cyan-500">
+                            Fecha de Pago
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <form id="SaveBillsForm" method="post">
+                @{
+                    foreach (var Bills in Model.Item1)
+                    {
+                        <input type="hidden" name="Bills[@Model.Item1.IndexOf(Bills)].idBill" value="@Bills.idBill">
+                        <div class="w-full relative flex gap-2 justify-center mt-4 ">
+
+                            @{
+                                string paid = @Bills.Paid == "on" ? "checked" : "";
+                            }
+
+                            <div class="h-10 absolute top-1 left-[-31.5px] flex items-center justify-center">
+                                <input onchange="SaveBills()" type="checkbox" name="Bills[@Model.Item1.IndexOf(Bills)].Paid" @paid>
+                            </div>
+
+                            <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 h-10 w-[63px]">
+                                <div class="flex items-center h-full">
+                                    <select onchange="SaveBills()" name="Bills[@Model.Item1.IndexOf(Bills)].idIcons" class="fa appearance-none h-full rounded-md border-0 bg-transparent py-2 w-[60px] text-center text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        @{
+                                            foreach (var Icon in Model.Item2)
+                                            {
+                                                if (Icon.idIcons == Bills.idIcons)
+                                                {
+                                                    <option selected value="@Icon.idIcons" class="fa">@Html.Raw(Icon.Code)</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@Icon.idIcons" class="fa">@Html.Raw(Icon.Code)</option>
+                                                }
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="relative w-[197px] mt-1 rounded-md shadow-sm border-2 border-cyan-500 h-10">
+                                <input onfocusout="SaveBills()" type="text" min="1" name="Bills[@Model.Item1.IndexOf(Bills)].Name" value="@Bills.Name" id="Name" class="block w-full rounded-md border-gray-300 pl-2 pr-2 h-full focus:border-0 focus:ring-0 sm:text-sm pl-1" placeholder="Nombre">
+                            </div>
+
+                            <div class="relative w-[197px] mt-1 rounded-md shadow-sm border-2 border-cyan-500 h-10">
+                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <span class="text-gray-500 sm:text-sm">$</span>
+                                </div>
+                                @{
+                                    string idPrice = "price" + Model.Item1.IndexOf(Bills);
+                                    string hiddenPrice = "hiddenPrice" + Model.Item1.IndexOf(Bills);
+                                    string formatPrice = Bills.Cost.ToString("N0");
+                                }
+                                <input type="hidden" name="Bills[@Model.Item1.IndexOf(Bills)].Cost" id="@hiddenPrice" value="@Bills.Cost">
+                                <input onkeyup="formatPrice('@idPrice', '@hiddenPrice'), getFormBalanceLive()" onfocusout="SaveBills()" type="text" value="@formatPrice" id="@idPrice" class="appearance-none block w-full rounded-md border-gray-300 pl-7 pr-2 h-full focus:border-0 focus:ring-0 sm:text-sm" placeholder="0.00">
+                            </div>
+
+
+                            <div class="w-[197px]">
+                                <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 ">
+                                    <select onchange="SaveBills()" name="Bills[@Model.Item1.IndexOf(Bills)].idCategory" class="relative w-full cursor-default rounded-md border-0 bg-white py-2 pl-3 text-left shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                        @{
+                                            if (Model.Item3.Count > 0)
+                                            {
+                                                foreach (var category in Model.Item3)
+                                                {
+                                                    if (category.idCategory == Bills.idCategory)
+                                                    {
+                                                        <option selected value="@category.idCategory">@category.Name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@category.idCategory">@category.Name</option>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="">Sin Categorias</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="w-[197px] ">
+                                <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 ">
+                                    <select onchange="SaveBills()" name="Bills[@Model.Item1.IndexOf(Bills)].idPaymentMethod" class="relative w-full rounded-md bg-white py-2 pl-3 text-left shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+
+                                        @{
+                                            if (Model.Item4.Count > 0)
+                                            {
+                                                foreach (var paymentMethod in Model.Item4)
+                                                {
+                                                    if (paymentMethod.idPaymentMethod == Bills.idPaymentMethod)
+                                                    {
+                                                        <option selected value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="">Sin Medios de Pago</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-[197px] ">
+                                <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 ">
+                                    <input onchange="SaveBills()" type="date" name="Bills[@Model.Item1.IndexOf(Bills)].PaymentDate" value="@Bills.PaymentDate" class="relative w-full rounded-md bg-white py-2 pl-3 text-left shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+                            <div class="h-10 absolute top-1 right-[-31.5px] flex items-center justify-center">
+                                <button title="@Bills.idBill" type="button" onclick="deleteBill('@Bills.idBill')">
+                                    <i class="fa-solid fa-trash hover:text-red-500"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    }
+                }
+            </form>
+        }
+        else
+        {
+            <div class=" w-full h-[100px] flex items-center justify-center text-center">
+                <span>No tienes registros de gastos</span>
+            </div>
+        }
+    }
+
+
+
+</div>

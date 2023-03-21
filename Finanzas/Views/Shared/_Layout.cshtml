@@ -9,10 +9,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Piggy</title>
     <link rel="shortcut icon"href="~/icons/finanzas.png"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="~/js/tailwindcss.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="relative min-h-[100vh]">
+<body class="relative min-h-[100vh] overflow-x-hidden">
 <!-- BANNER -->
 <div class="relative sticky top-0 bg-white border-b-4 border-cyan-500 z-50">
     <div class="mx-auto max-w-7xl px-6">
@@ -41,15 +43,15 @@
                 </div>
                 <div class="relative flex justify-between">
                     <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
-                   
+
                     <button type="button" class="text-gray-500 group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-expanded="false">
                         <a>@Html.ActionLink("Gastos", "Index", "Dashboard")</a>
                     </button>
-                    
+
                 </div>
                 <div class="relative flex justify-between">
                     <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
-                   
+
                     <button type="button" class="text-gray-500 group inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-expanded="false">
                         <a>@Html.ActionLink("Control", "Index", "Dashboard")</a>
                     </button>
@@ -66,12 +68,12 @@
                     else
                     {
                         if (ViewBag.Title != "Ingresar" && ViewBag.Title != "Registrarse")
-                        {     
+                        {
                             @Html.ActionLink("Registrarse", "Register", "Auth", new { area = "" }, new { @class = "whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900" })
                             @Html.ActionLink("Ingresar", "Index", "Auth", new { area = "" }, new { @class = "ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-cyan-500 px-4 py-2 text-base font-medium text-black shadow-sm hover:bg-gray-700 hover:text-white" })
                         }
                     }
-                    
+
                 }
             </div>
 
@@ -187,7 +189,8 @@
         <p class="mt-5 text-center text-md leading-6 text-slate-500">Piggy 2023</p>
         <div class="mt-16 flex items-center justify-center space-x-4 text-sm font-semibold leading-6 text-slate-700">
             <a>Felipe Sarmiento</a>
-            <div class="h-4 w-px bg-cyan-500"></div><p>C# Asp .Net Core</p>
+            <div class="h-4 w-px bg-cyan-500"></div>
+            <p>C# Asp .Net Core</p>
         </div>
     </div>
 </footer>

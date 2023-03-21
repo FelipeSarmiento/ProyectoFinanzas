@@ -1,8 +1,5 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Data;
+﻿using System.Data.SqlClient;
 using System.Globalization;
-using System.Text;
 using Finanzas.Models;
 
 namespace Finanzas.Data;
@@ -95,9 +92,11 @@ public class DashboardData
     public Balance GetBalance(int idUser, int idMonth)
     {
         Balance oBalance = new Balance();
-        
+
         string queryString = "SELECT * FROM Balance WHERE idUser = " + idUser + " AND idMonth = " + idMonth;
-        
+
+        var bills = GetBills(idUser, idMonth);
+
         try
         {
             var cn = new Connection();
@@ -119,18 +118,17 @@ public class DashboardData
                         oBalance.idMonth = Int32.Parse(dr["idMonth"].ToString() ?? "");
 
                         return oBalance;
-
                     }
                     else
                     {
                         try
                         {
-                            var bills = GetBills(idUser, idMonth);
-                            
                             double expenses = bills.Sum(b => b.Cost);
                             double remaining = 0 - expenses;
-                            
-                            queryString = "INSERT INTO Balance (Income, Expenses, Remaining, idUser, idMonth) VALUES (0, "+ expenses + ", "+ remaining +" , " + idUser + ", " + idMonth + ")";
+
+                            queryString =
+                                "INSERT INTO Balance (Income, Expenses, Remaining, idUser, idMonth) VALUES (0, " +
+                                expenses + ", " + remaining + " , " + idUser + ", " + idMonth + ")";
                             cn = new Connection();
                             using (var connection2 = new SqlConnection(cn.getCadenaSQL()))
                             {
@@ -140,7 +138,6 @@ public class DashboardData
 
                                 return GetBalance(idUser, idMonth);
                             }
-                            
                         }
                         catch (Exception e)
                         {
@@ -155,6 +152,8 @@ public class DashboardData
         {
             return oBalance;
         }
+
+        UpdateBalance(idUser, idMonth);
     }
 
     public Tuple<int, string> GetCurrentOrSelectedMonth(string name = "")
@@ -353,6 +352,8 @@ public class DashboardData
                         bills.idIcons = Int32.Parse(dr["idIcons"].ToString() ?? "");
                         bills.Name = dr["Name"].ToString() ?? "";
                         bills.Cost = Double.Parse(dr["Cost"].ToString() ?? "");
+                        bills.PaymentDate = dr["PaymentDate"].ToString() ?? "";
+                        bills.Paid = dr["Paid"].ToString() ?? "";
                         bills.idMonth = Int32.Parse(dr["idMonth"].ToString() ?? "");
                         bills.idUser = Int32.Parse(dr["idUser"].ToString() ?? "");
                         bills.idCategory = Int32.Parse(dr["idCategory"].ToString() ?? "");
@@ -374,7 +375,7 @@ public class DashboardData
     public void AddBill(Bills Bills)
     {
         string queryString =
-            $"INSERT INTO Bills (idIcons, Name, Cost, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bills.idIcons}, '{Bills.Name}', {Bills.Cost}, {Bills.idMonth}, {Bills.idUser}, {Bills.idCategory}, {Bills.idPaymentMethod} )";
+            $"INSERT INTO Bills (idIcons, Name, Cost, PaymentDate, Paid, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bills.idIcons}, '{Bills.Name}', {Bills.Cost}, '{Bills.PaymentDate}', '{Bills.Paid}', {Bills.idMonth}, {Bills.idUser}, {Bills.idCategory}, {Bills.idPaymentMethod} )";
 
         try
         {
@@ -398,11 +399,10 @@ public class DashboardData
         foreach (var Bill in Bills)
         {
             string queryString = "UPDATE Bills SET idIcons = " + Bill.idIcons + ", Name = '" + Bill.Name +
-                                 "', Cost = " + Bill.Cost + ", idMonth = " + Bill.idMonth + ", idUser = " +
-                                 Bill.idUser + ", idCategory = " + Bill.idCategory + ", idPaymentMethod = " +
-                                 Bill.idPaymentMethod + " WHERE idBill = " + Bill.idBill;
-
-            //string queryString = $"INSERT INTO Bills (idIcons, Name, Cost, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bill.idIcons}, '{Bill.Name}', {Bill.Cost}, {Bill.idMonth}, {Bill.idUser}, {Bill.idCategory}, {Bill.idPaymentMethod} )";
+                                 "', Cost = " + Bill.Cost + ", PaymentDate = '" + Bill.PaymentDate + "', Paid = '" +
+                                 Bill.Paid + "', idMonth = " + Bill.idMonth + ", idUser = " + Bill.idUser +
+                                 ", idCategory = " + Bill.idCategory + ", idPaymentMethod = " + Bill.idPaymentMethod +
+                                 " WHERE idBill = " + Bill.idBill;
 
             try
             {
@@ -424,13 +424,14 @@ public class DashboardData
 
     public void SaveBalance(Balance Balance)
     {
-        
         var bills = GetBills(Balance.idUser, Balance.idMonth);
 
         double expenses = bills.Sum(c => c.Cost);
         double remaining = Double.Parse(Balance.Income) - expenses;
-        
-        string queryString = "UPDATE Balance SET Income = " + Balance.Income + ", Expenses = " + expenses + ", Remaining = " + remaining + " WHERE idUser = " + Balance.idUser;
+
+        string queryString = "UPDATE Balance SET Income = " + Balance.Income + ", Expenses = " + expenses +
+                             ", Remaining = " + remaining + " WHERE idUser = " + Balance.idUser + " AND idMonth = " +
+                             Balance.idMonth;
 
         try
         {
@@ -448,7 +449,7 @@ public class DashboardData
             //return new List<Categories>();
         }
     }
-    
+
     public void DeleteBill(int idBill)
     {
         string queryString = "DELETE FROM Bills WHERE idBill = " + idBill;
@@ -469,5 +470,31 @@ public class DashboardData
             //return new List<Categories>();
         }
     }
-    
+
+    public void UpdateBalance(int idUser, int idMonth)
+    {
+        var bills = GetBills(idUser, idMonth);
+        var balance = GetBalance(idUser, idMonth);
+        balance.Expenses = bills.Sum(b => b.Cost).ToString();
+        var remaining = Double.Parse(balance.Income) - Double.Parse(balance.Expenses);
+        balance.Remaining = remaining.ToString();
+
+        string queryString = "UPDATE Balance SET Expenses = " + balance.Expenses + ", Remaining = " +
+                             balance.Remaining + " WHERE idUser = " + idUser + " AND idMonth = " + idMonth;
+
+        try
+        {
+            var cn = new Connection();
+            using (var connection = new SqlConnection(cn.getCadenaSQL()))
+            {
+                connection.Open();
+                var command = new SqlCommand(queryString, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
 }

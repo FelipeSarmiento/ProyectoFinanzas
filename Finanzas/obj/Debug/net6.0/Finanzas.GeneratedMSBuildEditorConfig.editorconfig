@@ -28,8 +28,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXGluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/felip/OneDrive/Escritorio/ProyectoFinanzas/Finanzas/Finanzas/Views/Dashboard/Sections/DashboardContent.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFNlY3Rpb25zXERhc2hib2FyZENvbnRlbnQuY3NodG1s
+[C:/Users/felip/OneDrive/Escritorio/ProyectoFinanzas/Finanzas/Finanzas/Views/Dashboard/PartialViews/_BalanceForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFBhcnRpYWxWaWV3c1xfQmFsYW5jZUZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/felip/OneDrive/Escritorio/ProyectoFinanzas/Finanzas/Finanzas/Views/Dashboard/PartialViews/_DashboardContent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFBhcnRpYWxWaWV3c1xfRGFzaGJvYXJkQ29udGVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/felip/OneDrive/Escritorio/ProyectoFinanzas/Finanzas/Finanzas/Views/Home/About.cshtml]

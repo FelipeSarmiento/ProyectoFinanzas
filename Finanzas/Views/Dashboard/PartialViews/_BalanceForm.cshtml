@@ -1,0 +1,35 @@
+﻿@model Finanzas.Models.Balance
+
+<form class="w-7/12" action="~/Dashboard/SaveBalance" id="BalanceForm" method="post">
+    <div class="w-full flex gap-3">
+        @{
+            string Income = Double.Parse(Model.Income).ToString("N0");
+
+            double percentForIncome = Double.Parse(Model.Income) * 0.3;
+
+            string Expenses = Double.Parse(Model.Expenses).ToString("N0");
+            string Remaining = Double.Parse(Model.Remaining).ToString("N0");
+
+            string classRemaining = "border-cyan-500";
+
+            if (percentForIncome < Double.Parse(Model.Expenses))
+            {
+                classRemaining = "border-red-500";
+            }
+
+        }
+        <div class="w-1/3 border-b-2 border-cyan-500 flex justify-center relative">
+            <input type="hidden" name="Income" id="BalanceIncomeHidden" value="@Model.Income">
+            <input onkeyup="formatBalance()" type="text" class="h-10 text-center appearance-none" id="BalanceIncome" placeholder="Ingresos" value="$ @Income">
+            <span class="absolute top-full text-sm text-cyan-500">Ingresos</span>
+        </div>
+        <div class="w-1/3 border-b-2 border-cyan-500 flex justify-center relative">
+            <input type="text" readonly="true" disabled="true" class="h-10 text-center bg-transparent" id="BalanceExpenses" placeholder="Egresos" value="$ @Expenses">
+            <span class="absolute top-full text-sm text-cyan-500">Egresos</span>
+        </div>
+        <div id="remainingDiv" class="w-1/3 border-b-2 @classRemaining flex justify-center relative">
+            <input type="text" class="h-10 text-center bg-transparent" disabled="true" id="BalanceRemaining" placeholder="Restante" value="$ @Remaining">
+            <span class="absolute top-full text-sm text-cyan-500">Restante</span>
+        </div>
+    </div>
+</form>

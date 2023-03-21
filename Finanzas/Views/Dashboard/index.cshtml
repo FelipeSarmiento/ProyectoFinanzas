@@ -1,6 +1,5 @@
-﻿@model Finanzas.Models.Categories;
-@using System.Globalization
-@using Finanzas.Models
+﻿@using Finanzas.Models
+@model Finanzas.Models.Categories;
 @{
     ViewBag.Title = "Gastos";
     var Months = ViewBag.Months;
@@ -240,31 +239,16 @@
 </div>
 </div>
 
-<main class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-<div class="flex flex-col md:flex-row items-center md:items-baseline justify-center md:justify-between border-b border-gray-200 pt-12 pb-6">
+
+<!--
+
+MAIN CONTENT
+
+-->
+<main class="mx-auto w-full">
+<div class="flex flex-col w-10/12 m-auto md:flex-row items-center md:items-baseline justify-center md:justify-between border-b border-gray-200 pt-12 pb-6">
     <h1 class="text-4xl font-bold tracking-tight text-gray-900 my-4 md:my-0">Registra tus gastos</h1>
-    <form class="w-7/12" action="~/Dashboard/SaveBalance" id="BalanceForm" method="post">
-        <div class="w-full flex gap-3">
-            @{
-                string Income = Double.Parse(Balance.Income).ToString("N0");
-                string Expenses = Double.Parse(Balance.Expenses).ToString("N0");
-                string Remaining = Double.Parse(Balance.Remaining).ToString("N0");
-            }
-            <div class="w-1/3 border-b-2 border-cyan-500 flex justify-center relative">
-                <input type="hidden" name="Income" id="BalanceIncomeHidden" value="@Balance.Income">
-                <input onkeyup="formatBalance()" type="text" class="h-10 text-center appearance-none" id="BalanceIncome" placeholder="Ingresos" value="$ @Income">
-                <span class="absolute top-full text-sm text-cyan-500">Ingresos de @CurrentMonth.Item2</span>
-            </div>
-            <div class="w-1/3 border-b-2 border-cyan-500 flex justify-center relative">
-                <input type="text" readonly="true" disabled="true" class="h-10 text-center bg-transparent" id="BalanceExpenses" placeholder="Egresos" value="$ @Expenses">
-                <span class="absolute top-full text-sm text-cyan-500">Egresos de @CurrentMonth.Item2</span>
-            </div>
-            <div class="w-1/3 border-b-2 border-cyan-500 flex justify-center relative">
-                <input type="text" class="h-10 text-center bg-transparent" disabled="true" id="BalanceRemaining" placeholder="Restante" value="$ @Remaining">
-                <span class="absolute top-full text-sm text-cyan-500">Restante de @CurrentMonth.Item2</span>
-            </div>
-        </div>
-    </form>
+    @Html.Partial("PartialViews/_BalanceForm", Balance)
     <div class="flex items-center mt-10 md:mt-0">
 
     </div>
@@ -272,359 +256,339 @@
 
 <section aria-labelledby="products-heading" class="pt-6 pb-12">
 
-<div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
+<div class="w-full relative">
 
-<div class="col-span-1">
-    <div class="flex flex-col items-center">
-        <div class="pt-4 flex flex-col items-center border-b-2 border-cyan-500">
-            <label for="orderBy">Registrar gastos de</label>
-            <form id="FormMonth" action="~/Dashboard/SelectMonth" method="post">
-                <select onchange="SubmitForm('FormMonth')" class="py-2 text-center" name="Name" id="MonthSelect">
-                    <option value="">Mes</option>
-                    @{
-                        foreach (var Month in Months)
-                        {
-                            if (@CurrentMonth.Item1 == @Month.idMonth)
+<button onclick="optionsModal('modalOptions')" title="Options" class="absolute top-3 left-6 text-xl text-cyan-500">
+    <i class="fa-solid fa-angles-right"></i>
+</button>
+<button onclick="optionsModal('modalStats')" title="Stats" class="absolute top-3 right-6 text-xl text-cyan-500">
+    <i class="fa-solid fa-angles-left"></i>
+</button>
+
+<!-- 
+
+MODAL OPTIONS
+
+-->
+
+<div id="modalOptions" class="absolute animate__animated animate__fast bg-white w-2/4 shadow-2xl  grid grid-cols-4  min-h-full py-16 z-30 left-[-50%] border-4 border-r-2 border-l-0 border-cyan-400">
+    <button onclick="optionsModal('modalOptions')" class="absolute top-3 right-3 text-xl text-cyan-500">
+        <i class="fa-solid fa-angles-left"></i>
+    </button>
+    <div class="col-span-2 flex flex-col items-center">
+        <div class="border-b w-[300px] border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                    <span class="font-medium text-gray-900">Categorias</span>
+                </button>
+            </h3>
+
+            <div class="pt-6" id="filter-section-1">
+                <div class="space-y-4 flex flex-col items-center">
+                    <select name="" id="" class="h-10 w-3/4 border-b-2 border-cyan-500 focus:border-b-2">
+                        @{
+                            if (Categories.Count > 0)
                             {
-                                <option selected value="@Month.Name"> @Month.Name </option>
+                                foreach (Categories category in Categories)
+                                {
+                                    <option value="@category.idCategory">@category.Name</option>
+                                }
                             }
                             else
                             {
-                                <option value="@Month.Name"> @Month.Name </option>
+                                <option value="">Sin Categorias</option>
                             }
                         }
-                    }
-                </select>
-            </form>
+                    </select>
+
+                    <div class="flex flex-row w-3/4 justify-center relative">
+                        <form action="~/Dashboard/AddCategory/" method="post" class="w-full">
+                            <input type="text" asp-for="" name="Name" id="Name" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Añadir Categoria">
+                            <button type="submit" class="appearance-none ml-6 flex items-center absolute right-1 top-2/4 -translate-y-2/4">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="border-b w-[300px] border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
 
-    <script >
-                    function SubmitForm(idForm) {
-                        document.getElementById(idForm).submit();
-                    }
-                </script>
-    <div class="border-b border-gray-200 py-6">
-        <h3 class="-my-3 flow-root">
-
-            <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
-                <span class="font-medium text-gray-900">Categorias</span>
-            </button>
-        </h3>
-
-        <div class="pt-6" id="filter-section-1">
-            <div class="space-y-4 flex flex-col items-center">
-                <select name="" id="" class="h-10 w-3/4 border-b-2 border-cyan-500 focus:border-b-2">
-                    @{
-                        if (Categories.Count > 0)
-                        {
-                            foreach (Categories category in Categories)
+                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                    <span class="font-medium text-gray-900">Medios de Pago</span>
+                </button>
+            </h3>
+            <div class="pt-6" id="filter-section-1">
+                <div class="space-y-4 flex flex-col items-center">
+                    <select name="" id="" class="h-10 w-3/4 border-b-2 border-cyan-500 focus:border-b-2">
+                        @{
+                            if (PaymentMethods.Count > 0)
                             {
-                                <option value="@category.idCategory">@category.Name</option>
+                                foreach (PaymentMethods paymentMethod in PaymentMethods)
+                                {
+                                    <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">Sin Medios de Pago</option>
                             }
                         }
-                        else
-                        {
-                            <option value="">Sin Categorias</option>
-                        }
-                    }
-                </select>
+                    </select>
+                    <div class="flex flex-row w-3/4 justify-center relative">
+                        <form action="~/Dashboard/AddPaymentMethod/" method="post" class="w-full">
+                            <input type="text" asp-for="" name="Name" id="Name" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Añadir Medio">
+                            <button type="submit" class="appearance-none ml-6 flex items-center absolute right-1 top-2/4 -translate-y-2/4">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
 
-                <div class="flex flex-row w-3/4 justify-center relative">
-                    <form action="~/Dashboard/AddCategory/" method="post">
-                        <input type="text" asp-for="" name="Name" id="Name" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Añadir Categoria">
-                        <button type="submit" class="appearance-none ml-6 flex items-center absolute right-1 top-2/4 -translate-y-2/4">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
-                            </svg>
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="border-b border-gray-200 py-6">
-        <h3 class="-my-3 flow-root">
+    <div class="col-span-2 flex flex-col items-center">
+        <div class="border-b w-[300px] border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                    <span class="font-medium text-gray-900">Agregar Gasto Recurrente</span>
+                </button>
+            </h3>
 
-            <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
-                <span class="font-medium text-gray-900">Medios de Pago</span>
-            </button>
-        </h3>
-        <div class="pt-6" id="filter-section-1">
-            <div class="space-y-4 flex flex-col items-center">
-                <select name="" id="" class="h-10 w-3/4 border-b-2 border-cyan-500 focus:border-b-2">
-                    @{
-                        if (PaymentMethods.Count > 0)
-                        {
-                            foreach (PaymentMethods paymentMethod in PaymentMethods)
-                            {
-                                <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+            <div class="pt-6" id="filter-section-1">
+                <div class="space-y-4 flex flex-col items-center">
+                    <div class="flex flex-col w-3/4 gap-y-2 justify-center relative">
+                        <label class="text-xs" for="NameRecurrent">Nombre *</label>
+                        <input type="text" asp-for="" name="Name" id="NameRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
+                        <label class="text-xs" for="CostRecurrent">Valor *</label>
+                        <input type="text" asp-for="" name="Name" id="CostRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                        <label class="text-xs" for="categoryRecurrent">Categoria *</label>
+                        <select name="" id="categoryRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
+                            @{
+                                if (Categories.Count > 0)
+                                {
+                                    foreach (Categories category in Categories)
+                                    {
+                                        <option value="@category.idCategory">@category.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">Sin Categorias</option>
+                                }
                             }
-                        }
-                        else
-                        {
-                            <option value="">Sin Medios de Pago</option>
-                        }
-                    }
-                </select>
-                <div class="flex flex-row w-3/4 justify-center relative">
-                    <form action="~/Dashboard/AddPaymentMethod/" method="post">
-                        <input type="text" asp-for="" name="Name" id="Name" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Añadir Medio">
-                        <button type="submit" class="appearance-none ml-6 flex items-center absolute right-1 top-2/4 -translate-y-2/4">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
-                            </svg>
-                        </button>
-                    </form>
+                        </select>
+                        <label class="text-xs" for="paymentMethodRecurrent">Metodo de Pago *</label>
+                        <select name="" id="paymentMethodRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
+                            @{
+                                if (PaymentMethods.Count > 0)
+                                {
+                                    foreach (PaymentMethods paymentMethod in PaymentMethods)
+                                    {
+                                        <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">Sin Medios de Pago</option>
+                                }
+                            }
+                        </select>
+                        <label class="text-xs" for="fromRecurrent">Fecha Inicio *</label>
+                        <input type="date" asp-for="" name="Name" id="fromRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
+                        <label class="text-xs" for="toRecurrent">Fecha Fin</label>
+                        <input type="date" asp-for="" name="Name" id="toRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
-<div class="lg:col-span-4">
+<!--
 
-    <div class="min-h-96 rounded-lg border-4 border-dashed border-cyan-200 lg:h-full md:p-10 pt-3 flex flex-col items-center">
+BILLS TABLE
 
-        <div class="w-3/4 h-16 border-b-2 border-cyan-500 text-3xl font-extrabold text-cyan-500 flex items-center justify-center">
-            <span>@CurrentMonth.Item2</span>
+-->
+
+<div class="w-10/12 m-auto min-h-full">
+
+    <div class="min-h-96 rounded-lg border-4 border-solid border-cyan-400 lg:h-full md:p-10 pt-3 flex flex-col items-center">
+
+        <div class="relative w-3/4 h-16 border-b-2 border-cyan-500 text-3xl font-extrabold text-cyan-500 flex items-center justify-between mb-8">
+            <button onclick="changeMonth('previousMonth')">
+                <i class="fa-solid fa-angle-left"></i>
+            </button>
+            <input type="hidden" id="idCurrentMonthHidden" value="@CurrentMonth.Item1">
+            <h2>@CurrentMonth.Item2<span class="text-gray-500 font-normal"> / </span>2023</h2>
+            <button onclick="changeMonth('nextMonth')">
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
         </div>
 
         @{
-            if (Bills.Count > 0)
-            {
-                <div class="flex w-full gap-2 justify-center mt-4">
+            Tuple<List<Bills>, List<Icons>, List<Categories>, List<PaymentMethods>> tuple = new Tuple<List<Bills>, List<Icons>, List<Categories>, List<PaymentMethods>>(Bills, Icons, Categories, PaymentMethods);
 
-                    <div class="relative mt-1 rounded-md shadow-sm border-b-2 w-[63px]  border-cyan-500 h-7">
-                        <div class="flex items-center justify-center h-full">
-                            <span class="sm:text-sm text-cyan-500">
-                                ICO
-                            </span>
-                        </div>
-                    </div>
+            @Html.Partial("PartialViews/_DashboardContent", tuple)
 
-                    <div class="relative w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
-                        <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
-                            <span class="sm:text-sm text-cyan-500">
-                                Nombre
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
-                        <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
-                            <span class="sm:text-sm text-cyan-500">
-                                Valor
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
-                        <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
-                            <span class="sm:text-sm text-cyan-500">
-                                Categorias
-                            </span>
-                        </div>
-                    </div>
-                    <div class="relative  w-[197px] mt-1 rounded-md shadow-sm border-b-2 border-cyan-500 h-7">
-                        <div class="w-full flex items-center justify-center h-full pl-3 pr-3">
-                            <span class="sm:text-sm text-cyan-500">
-                                Medios de Pago
-                            </span>
-                        </div>
-                    </div>
-                    <div class="w-[63px]">
-
-                    </div>
-                </div>
-            }
-        }
-
-
-        @{
-            if (Bills.Count > 0)
-            {
-                <form id="SaveBillsForm" method="post">
-                    @{
-                        for (int i = 0; i < Bills.Count; i++)
-                        {
-                            <input type="hidden" name="Bills[@i].idBill" value="@Bills[i].idBill">
-                            <div class="w-full flex gap-2 justify-center mt-4 ">
-
-                                <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 h-10 w-[63px]">
-                                    <div class="flex items-center h-full">
-                                        <select name="Bills[@i].idIcons" class="fa appearance-none h-full rounded-md border-transparent bg-transparent py-2 w-[60px] text-center text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            @{
-                                                foreach (var Icon in Icons)
-                                                {
-                                                    if (Icon.idIcons == Bills[i].idIcons)
-                                                    {
-                                                        <option selected value="@Icon.idIcons" class="fa">@Html.Raw(Icon.Code)</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@Icon.idIcons" class="fa">@Html.Raw(Icon.Code)</option>
-                                                    }
-                                                }
-                                            }
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="relative w-[197px] mt-1 rounded-md shadow-sm border-2 border-cyan-500 h-10">
-                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 pr-3">
-                                        <span class="sm:text-sm text-cyan-500">
-                                            <i class="fa-solid fa-pencil"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" name="Bills[@i].Name" value="@Bills[i].Name" id="Name" class="block w-full rounded-md border-gray-300 pl-9 pr-12 h-full focus:border-0 focus:ring-0 sm:text-sm pl-2" placeholder="Nombre">
-                                </div>
-
-                                <div class="relative w-[197px] mt-1 rounded-md shadow-sm border-2 border-cyan-500 h-10">
-                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                        <span class="text-gray-500 sm:text-sm">$</span>
-                                    </div>
-                                    @{
-                                        string idPrice = "price" + i;
-                                        string hiddenPrice = "hiddenPrice" + i;
-                                        string formatPrice = Bills[i].Cost.ToString("N0");
-                                    }
-                                    <input type="hidden" name="Bills[@i].Cost" id="@hiddenPrice" value="@Bills[i].Cost">
-                                    <input onkeyup="formatPrice('@idPrice', '@hiddenPrice')" type="text" value="@formatPrice" id="@idPrice" class="appearance-none block w-full rounded-md border-gray-300 pl-7 pr-12 h-full focus:border-0 focus:ring-0 sm:text-sm" placeholder="0.00">
-                                </div>
-
-
-                                <div class="w-[197px]">
-                                    <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 ">
-                                        <select name="Bills[@i].idCategory" class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 text-left shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                                            @{
-                                                if (Categories.Count > 0)
-                                                {
-                                                    foreach (Categories category in Categories)
-                                                    {
-                                                        if (category.idCategory == Bills[i].idCategory)
-                                                        {
-                                                            <option selected value="@category.idCategory">@category.Name</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@category.idCategory">@category.Name</option>
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <option value="">Sin Categorias</option>
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="w-[197px] ">
-                                    <div class="relative mt-1 rounded-md shadow-sm border-2 border-cyan-500 ">
-                                        <select name="Bills[@i].idPaymentMethod" class="relative w-full rounded-md border border-gray-300 bg-white py-2 pl-3 text-left shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-
-                                            @{
-                                                if (PaymentMethods.Count > 0)
-                                                {
-                                                    foreach (PaymentMethods paymentMethod in PaymentMethods)
-                                                    {
-                                                        if (paymentMethod.idPaymentMethod == Bills[i].idPaymentMethod)
-                                                        {
-                                                            <option selected value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <option value="">Sin Medios de Pago</option>
-                                                }
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="w-[63px] h-10 mt-1 flex items-center justify-center">
-                                    <button onclick="deleteBill(@Bills[i].idBill)">
-                                        <i class="fa-solid fa-trash hover:text-red-500"></i>
-                                    </button>
-                                </div>
-
-                            </div>
-                        }
-                    }
-                </form>
-            }
-            else
-            {
-                <div class=" w-3/4 h-[100px] flex items-center space-x-2 justify-center">
-                    <span>No tienes registros de gastos para @CurrentMonth.Item2</span>
-                </div>
-            }
         }
         <div class=" w-3/4 h-[100px] flex items-center space-x-2 justify-center">
-            <form action="~/Dashboard/AddBill" method="post">
-                <button type="submit" class="bg-cyan-500 p-3 min-w-[100px] rounded-md text-white text-xs">Agregar gasto</button>
-            </form>
-            <button onclick="SaveBills()" class="bg-cyan-500 p-3 rounded-md min-w-[100px] text-white text-xs">Guardar</button>
+            <button id="btnAddBill" class="bg-cyan-500 p-3 min-w-[100px] rounded-md text-white text-xs">Agregar gasto</button>
         </div>
-
-        <script>
-            const SaveBills = () => {
-                        
-                    // obtener los formularios
-                    var form1 = document.getElementById("BalanceForm");
-                    var form2 = document.getElementById("SaveBillsForm");
-                    
-                    // crear un objeto FormData y agregar los datos de ambos formularios
-                    var formData = new FormData(form1);
-                    if (form2 != null){ 
-                        for (var pair of new FormData(form2)) {
-                          formData.append(pair[0], pair[1]);
-                        }
-                    }
-
-                    
-                    // crear una instancia de XMLHttpRequest y enviar la solicitud
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "Dashboard/SubmitBothForms", true);
-                    xhr.onreadystatechange = function () {
-                      if (xhr.readyState === 4 && xhr.status === 200) {
-                        // hacer algo con la respuesta
-                      }
-                    };
-                    xhr.send(formData);
-                    
-                    location.reload();
-                    
-                /*document.getElementById("SaveBillsForm").submit();
-                document.getElementById("BalanceForm").submit();*/
-            }
-            
-            const deleteBill = (id) => {
-                var xhrDelete = new XMLHttpRequest();
-                xhrDelete.open("POST", "Dashboard/DeleteBill", true);
-                xhrDelete.onreadystatechange = function () {
-                  if (xhrDelete.readyState === 4 && xhr.status === 200) {
-                    // hacer algo con la respuesta
-                  }
-                };
-               
-                var data = {
-                    idBill: id
-                };
-                xhrDelete.send(formDataDelete);
-                //location.reload();
-            }
-        </script>
     </div>
 
+</div>
+
+
+<!--
+
+MODAL STATS
+
+-->
+<div id="modalStats" class="absolute animate__animated animate__fast bg-white w-2/4 shadow-2xl  grid grid-cols-4  min-h-full py-16 z-30 top-0 right-[-50%] border-4 border-r-2 border-r-0 border-cyan-400">
+    <button onclick="optionsModal('modalStats')" class="absolute top-3 left-3 text-xl text-cyan-500">
+        <i class="fa-solid fa-angles-right"></i>
+    </button>
+    <div class="col-span-2 flex flex-col items-center">
+        <div class="border-b w-[300px] border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                    <span class="font-medium text-gray-900">Categorias</span>
+                </button>
+            </h3>
+
+            <div class="pt-6" id="filter-section-1">
+                <div class="space-y-4 flex flex-col items-center">
+                    <select name="" id="" class="h-10 w-3/4 border-b-2 border-cyan-500 focus:border-b-2">
+                        @{
+                            if (Categories.Count > 0)
+                            {
+                                foreach (Categories category in Categories)
+                                {
+                                    <option value="@category.idCategory">@category.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">Sin Categorias</option>
+                            }
+                        }
+                    </select>
+
+                    <div class="flex flex-row w-3/4 justify-center relative">
+                        <form action="~/Dashboard/AddCategory/" method="post" class="w-full">
+                            <input type="text" asp-for="" name="Name" id="Name" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Añadir Categoria">
+                            <button type="submit" class="appearance-none ml-6 flex items-center absolute right-1 top-2/4 -translate-y-2/4">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-b w-[300px] border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+
+                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                    <span class="font-medium text-gray-900">Medios de Pago</span>
+                </button>
+            </h3>
+            <div class="pt-6" id="filter-section-1">
+                <div class="space-y-4 flex flex-col items-center">
+                    <select name="" id="" class="h-10 w-3/4 border-b-2 border-cyan-500 focus:border-b-2">
+                        @{
+                            if (PaymentMethods.Count > 0)
+                            {
+                                foreach (PaymentMethods paymentMethod in PaymentMethods)
+                                {
+                                    <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">Sin Medios de Pago</option>
+                            }
+                        }
+                    </select>
+                    <div class="flex flex-row w-3/4 justify-center relative">
+                        <form action="~/Dashboard/AddPaymentMethod/" method="post" class="w-full">
+                            <input type="text" asp-for="" name="Name" id="Name" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Añadir Medio">
+                            <button type="submit" class="appearance-none ml-6 flex items-center absolute right-1 top-2/4 -translate-y-2/4">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-span-2 flex flex-col items-center">
+        <div class="border-b w-[300px] border-gray-200 py-6">
+            <h3 class="-my-3 flow-root">
+                <button type="button" class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                    <span class="font-medium text-gray-900">Agregar Gasto Recurrente</span>
+                </button>
+            </h3>
+
+            <div class="pt-6" id="filter-section-1">
+                <div class="space-y-4 flex flex-col items-center">
+                    <div class="flex flex-col w-3/4 gap-y-2 justify-center relative">
+                        <label class="text-xs" for="NameRecurrent">Nombre *</label>
+                        <input type="text" asp-for="" name="Name" id="NameRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
+                        <label class="text-xs" for="CostRecurrent">Valor *</label>
+                        <input type="text" asp-for="" name="Name" id="CostRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                        <label class="text-xs" for="categoryRecurrent">Categoria *</label>
+                        <select name="" id="categoryRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
+                            @{
+                                if (Categories.Count > 0)
+                                {
+                                    foreach (Categories category in Categories)
+                                    {
+                                        <option value="@category.idCategory">@category.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">Sin Categorias</option>
+                                }
+                            }
+                        </select>
+                        <label class="text-xs" for="paymentMethodRecurrent">Metodo de Pago *</label>
+                        <select name="" id="paymentMethodRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
+                            @{
+                                if (PaymentMethods.Count > 0)
+                                {
+                                    foreach (PaymentMethods paymentMethod in PaymentMethods)
+                                    {
+                                        <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">Sin Medios de Pago</option>
+                                }
+                            }
+                        </select>
+                        <label class="text-xs" for="fromRecurrent">Fecha Inicio *</label>
+                        <input type="date" asp-for="" name="Name" id="fromRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
+                        <label class="text-xs" for="toRecurrent">Fecha Fin</label>
+                        <input type="date" asp-for="" name="Name" id="toRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 </section>
@@ -634,8 +598,133 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>
+
+    const optionsModal = (idModal) => {
+        
+        const modal = document.getElementById(idModal);
+        
+        if (idModal == 'modalStats'){
+            if (modal.classList.contains("right-[-50%]"))
+            {
+                modal.classList.remove("animate__slideInLeft");
+                modal.classList.add("right-0");
+                modal.classList.add("animate__slideInRight");
+                modal.classList.remove("right-[-50%]");
+            }
+            else
+            {
+                modal.classList.add("animate__slideInLeft");
+                modal.classList.remove("animate__slideInRight");
+                modal.classList.add("right-[-50%]");
+                modal.classList.remove("right-0");
+                
+            }
+        }
+        if (idModal == 'modalOptions'){
+            if (modal.classList.contains("left-[-50%]"))
+            {
+                modal.classList.remove("animate__slideInRight");
+                modal.classList.add("animate__slideInLeft");
+                modal.classList.remove("left-[-50%]");
+            }
+            else
+            {
+                modal.classList.add("animate__slideInRight");
+                modal.classList.remove("animate__slideInLeft");
+                modal.classList.add("left-[-50%]");
+                
+            }
+        }
+        
+        
+    }
+
+    const changeMonth = (action) => {
+        
+        let idMonth = parseInt(document.getElementById("idCurrentMonthHidden").value);
+        
+        switch (action) {
+            
+            case 'nextMonth':
+                
+                if (idMonth < 12)
+                    idMonth++;
+                else
+                    idMonth = 1;
+                
+                break;
+                
+            case 'previousMonth':
+                if (idMonth > 1)
+                    idMonth--;
+                else
+                    idMonth = 12;
+                break;
+            
+        }
+        
+        $.ajax({
+            url: "/Dashboard/SelectMonth",
+            type: "POST",
+            data: { idMonth: idMonth },
+            success: function (result) {
+                location.reload();
+            }
+        });
+    }
+
+    function SubmitForm(idForm) {
+        document.getElementById(idForm).submit();
+    }
+    const SaveBills = () => {
+            
+        // obtener los formularios
+        var form1 = document.getElementById("BalanceForm");
+        var form2 = document.getElementById("SaveBillsForm");
+        
+        // crear un objeto FormData y agregar los datos de ambos formularios
+        var formData = new FormData(form1);
+        if (form2 != null){ 
+            for (var pair of new FormData(form2)) {
+              formData.append(pair[0], pair[1]);
+            }
+        }
+        
+        $.ajax({
+            url: "/Dashboard/SubmitBothForms",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "html",
+            success: function (result) {
+                $("#DashboardContent").html(result.partialViewDashboardContent);
+                $("#BalanceForm").html(result.partialViewBalance);
+            },
+            error: function () {
+                console.log('Error en la solicitud AJAX');
+            }
+        });
+        
+    }
+    $(document).ready(function () {
+        $("#btnAddBill").click(function () {
+            $.ajax({
+                url: "/Dashboard/AddBill",
+                type: "POST",
+                success: function (result) {
+                    $("#DashboardContent").html(result);
+                }
+            });
+        });
+        
+    });
+        
+
     const formatPrice = (idPrice, hiddenPrice) => {
         let inputPrice = document.getElementById(idPrice);
+        if (inputPrice.value == "")
+            inputPrice.value = 0;
         let price = parseInt(inputPrice.value.replace(/[^0-9]/g, ''));
         let priceFormat = new Intl.NumberFormat('es-CO', { currency: 'COP' }).format(price);
         inputPrice.value = priceFormat;
@@ -650,14 +739,65 @@
         
         
         let balanceIncome = parseInt(inputBalanceIncome.value.replace(/[^0-9]/g, ''));
+        if (isNaN(balanceIncome))
+            balanceIncome = 0;
         let balanceExpenses = parseInt(inputBalanceExpenses.value.replace(/[^0-9]/g, ''));
         let balanceRemaining = balanceIncome - balanceExpenses;
-
         
         document.getElementById("BalanceIncomeHidden").value = balanceIncome;
         inputBalanceIncome.value = new Intl.NumberFormat('es-CO', {style: "currency", minimumFractionDigits: 0, maximumFractionDigits: 0, currency: 'COP' }).format(balanceIncome);
         inputBalanceExpenses.value = new Intl.NumberFormat('es-CO', {style: "currency", minimumFractionDigits: 0, maximumFractionDigits: 0, currency: 'COP' }).format(balanceExpenses);
         inputBalanceRemaining.value = new Intl.NumberFormat('es-CO', {style: "currency", minimumFractionDigits: 0, maximumFractionDigits: 0, currency: 'COP' }).format(balanceRemaining);
+
     }
     
+    const getFormBalanceLive = () => {
+        let IncomeBalance = document.getElementById("BalanceIncomeHidden")
+        let ExpensesBalance = document.getElementById("BalanceExpenses")
+        let RemainingBalance = document.getElementById("BalanceRemaining")
+        let total = 0;
+        let Income = IncomeBalance.value.replace(/[^0-9]/g, '');
+        var elements = document.querySelectorAll("[id*='price']");
+        elements.forEach(element => {
+            total += parseInt(element.value.replace(/[^0-9]/g, ''))
+        })
+        
+        let remaining = parseInt(Income) - total;
+        
+        ExpensesBalance.value = new Intl.NumberFormat('es-CO', {style: "currency", minimumFractionDigits: 0, maximumFractionDigits: 0, currency: 'COP' }).format(total);
+        RemainingBalance.value = new Intl.NumberFormat('es-CO', {style: "currency", minimumFractionDigits: 0, maximumFractionDigits: 0, currency: 'COP' }).format(remaining);
+        
+        
+    }
+    
+    const getBalanceForm = () => {
+         $.ajax({
+            url: "/Dashboard/GetBalanceForm",
+            type: "POST",
+            dataType: "html",
+            success: function (result2) {
+                $("#BalanceForm").html(result2);
+            },
+            error: function (error) {
+                console.log('Error en la solicitud AJAX del BalanceForm');
+            }
+        });
+    }
+    
+    const deleteBill = (id) => {
+    $.ajax({
+        url: "/Dashboard/DeleteBill",
+        type: "POST",
+        data: { idBill: id },
+        dataType: "html",
+        success: function (result) {
+            $("#DashboardContent").html(result);
+            getBalanceForm();
+        },
+        error: function () {
+            console.log('Error en la solicitud AJA del DashboardContentX');
+        }
+    });
+    
+    }
 </script>
