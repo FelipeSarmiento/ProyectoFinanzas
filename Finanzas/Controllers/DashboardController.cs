@@ -208,5 +208,24 @@ namespace Finanzas.Controllers
             var balance = oDashboardData.GetBalance(Int32.Parse(idUser), month.Item1);
             return PartialView("PartialViews/_BalanceForm", balance);
         }
+
+        [HttpPost]
+        public IActionResult SaveRecurringExpense(Bills bill, string FromDate, string ToDate)
+        {
+            string idUser = User.Claims.Where(c => c.Type == "idUser").Select(c => c.Value).FirstOrDefault();
+            bill.idUser = Int32.Parse(idUser);
+            bill.Recurring = "true";
+            int StartMonth = Int32.Parse(FromDate.Split("-")[1]);
+            int EndMonth = Int32.Parse(ToDate.Split("-")[1]);
+
+            for (int i = StartMonth; i <= EndMonth; i++)
+            {
+                bill.idMonth = i;
+                oDashboardData.AddBill(bill);
+                oDashboardData.UpdateBalance(bill.idUser, bill.idMonth);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

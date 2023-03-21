@@ -8,6 +8,7 @@
         public double Cost { get; set; }
         public string PaymentDate { get; set; }
         public string Paid { get; set; }
+        public string Recurring { get; set; }
         public int idMonth { get; set; }
         public int idUser { get; set; }
         public int idCategory { get; set; }

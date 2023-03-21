@@ -97,6 +97,7 @@ public class DashboardData
 
         var bills = GetBills(idUser, idMonth);
 
+
         try
         {
             var cn = new Connection();
@@ -354,6 +355,7 @@ public class DashboardData
                         bills.Cost = Double.Parse(dr["Cost"].ToString() ?? "");
                         bills.PaymentDate = dr["PaymentDate"].ToString() ?? "";
                         bills.Paid = dr["Paid"].ToString() ?? "";
+                        bills.Recurring = dr["Recurring"].ToString() ?? "";
                         bills.idMonth = Int32.Parse(dr["idMonth"].ToString() ?? "");
                         bills.idUser = Int32.Parse(dr["idUser"].ToString() ?? "");
                         bills.idCategory = Int32.Parse(dr["idCategory"].ToString() ?? "");
@@ -375,7 +377,7 @@ public class DashboardData
     public void AddBill(Bills Bills)
     {
         string queryString =
-            $"INSERT INTO Bills (idIcons, Name, Cost, PaymentDate, Paid, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bills.idIcons}, '{Bills.Name}', {Bills.Cost}, '{Bills.PaymentDate}', '{Bills.Paid}', {Bills.idMonth}, {Bills.idUser}, {Bills.idCategory}, {Bills.idPaymentMethod} )";
+            $"INSERT INTO Bills (idIcons, Name, Cost, PaymentDate, Paid, Recurring, idMonth, idUser, idCategory, idPaymentMethod) VALUES ({Bills.idIcons}, '{Bills.Name}', {Bills.Cost}, '{Bills.PaymentDate}', '{Bills.Paid}', '{Bills.Recurring}', {Bills.idMonth}, {Bills.idUser}, {Bills.idCategory}, {Bills.idPaymentMethod} )";
 
         try
         {
@@ -400,7 +402,8 @@ public class DashboardData
         {
             string queryString = "UPDATE Bills SET idIcons = " + Bill.idIcons + ", Name = '" + Bill.Name +
                                  "', Cost = " + Bill.Cost + ", PaymentDate = '" + Bill.PaymentDate + "', Paid = '" +
-                                 Bill.Paid + "', idMonth = " + Bill.idMonth + ", idUser = " + Bill.idUser +
+                                 Bill.Paid + "', Recurring = '" + Bill.Recurring + "' idMonth = " + Bill.idMonth +
+                                 ", idUser = " + Bill.idUser +
                                  ", idCategory = " + Bill.idCategory + ", idPaymentMethod = " + Bill.idPaymentMethod +
                                  " WHERE idBill = " + Bill.idBill;
 

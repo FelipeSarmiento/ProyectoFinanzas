@@ -364,46 +364,51 @@ MODAL OPTIONS
             <div class="pt-6" id="filter-section-1">
                 <div class="space-y-4 flex flex-col items-center">
                     <div class="flex flex-col w-3/4 gap-y-2 justify-center relative">
-                        <label class="text-xs" for="NameRecurrent">Nombre *</label>
-                        <input type="text" asp-for="" name="Name" id="NameRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
-                        <label class="text-xs" for="CostRecurrent">Valor *</label>
-                        <input type="text" asp-for="" name="Name" id="CostRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
-                        <label class="text-xs" for="categoryRecurrent">Categoria *</label>
-                        <select name="" id="categoryRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
-                            @{
-                                if (Categories.Count > 0)
-                                {
-                                    foreach (Categories category in Categories)
+                        <form action="~/Dashboard/SaveRecurringExpense" method="post">
+                            <label class="text-xs" for="NameRecurrent">Nombre *</label>
+                            <input type="text" asp-for="" name="Name" id="NameRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
+                            <label class="text-xs" for="CostRecurrent">Valor *</label>
+                            <input type="text" asp-for="" name="Cost" id="CostRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                            <label class="text-xs" for="categoryRecurrent">Categoria *</label>
+                            <select name="idCategory" id="categoryRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
+                                @{
+                                    if (Categories.Count > 0)
                                     {
-                                        <option value="@category.idCategory">@category.Name</option>
+                                        foreach (Categories category in Categories)
+                                        {
+                                            <option value="@category.idCategory">@category.Name</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="">Sin Categorias</option>
                                     }
                                 }
-                                else
-                                {
-                                    <option value="">Sin Categorias</option>
-                                }
-                            }
-                        </select>
-                        <label class="text-xs" for="paymentMethodRecurrent">Metodo de Pago *</label>
-                        <select name="" id="paymentMethodRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
-                            @{
-                                if (PaymentMethods.Count > 0)
-                                {
-                                    foreach (PaymentMethods paymentMethod in PaymentMethods)
+                            </select>
+                            <label class="text-xs" for="paymentMethodRecurrent">Metodo de Pago *</label>
+                            <select name="idPaymentMethod" id="paymentMethodRecurrent" class="h-10 w-full rounded-md border-2 border-cyan-500">
+                                @{
+                                    if (PaymentMethods.Count > 0)
                                     {
-                                        <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                        foreach (PaymentMethods paymentMethod in PaymentMethods)
+                                        {
+                                            <option value="@paymentMethod.idPaymentMethod">@paymentMethod.Name</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="">Sin Medios de Pago</option>
                                     }
                                 }
-                                else
-                                {
-                                    <option value="">Sin Medios de Pago</option>
-                                }
-                            }
-                        </select>
-                        <label class="text-xs" for="fromRecurrent">Fecha Inicio *</label>
-                        <input type="date" asp-for="" name="Name" id="fromRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
-                        <label class="text-xs" for="toRecurrent">Fecha Fin</label>
-                        <input type="date" asp-for="" name="Name" id="toRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                            </select>
+                            <label class="text-xs" for="fromRecurrent">Fecha Inicio *</label>
+                            <input type="date" asp-for="" name="FromDate" id="fromRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Nombre">
+                            <label class="text-xs" for="toRecurrent">Fecha Fin</label>
+                            <input type="date" asp-for="" name="ToDate" id="toRecurrent" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                            <label class="text-xs" for="PaymentDate">Fechas de Pago</label>
+                            <input type="date" asp-for="" name="PaymentDate" id="PaymentDate" class="h-10 w-full pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm" placeholder="Valor">
+                            <button type="submit" class="h-10 w-full my-2 pl-1 border-2 border-cyan-500 rounded-md placeholder:text-sm">Agregar</button>
+                        </form>
                     </div>
                 </div>
             </div>
